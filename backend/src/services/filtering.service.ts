@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 
 @Injectable()
 export class FilteringService {
@@ -30,4 +30,27 @@ export class FilteringService {
 
   }
 
+  // Filter number based on Fibonacci sequence
+  filterNumber(num: number): Observable<any> {
+
+    //  Return to 100 if the number is greater than or equal to 100
+    return of(num).pipe(
+      map(num => {
+        if (num >= 100) {
+          return 100;
+        } else {
+          return "OK"
+        }
+      })
+    )
+    //TODO Return the near more fibonacci sequence number via map
+
+  }
+
+  // TODO: Find the near more Fibonacci number
+  // TODO: Initialize the counter (near more)
+  // TODO: Loop through the Fibonacci sequence
+  // TODO: Compare the number with each Fibonacci number
+  // TODO: If the Fibonacci number is greater than num, keep it as a candidate
+  // TODO: If the Fibonacci number is less than or equal to num, update the near more
 }
