@@ -1,6 +1,7 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     FormsModule,
     CommonModule,
-    NgClass
+    NgClass,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -21,11 +22,14 @@ export class LoginComponent {
   // initialize string type property but initialize currently null
   submittedMessage: string | null = null;
 
+  constructor(private router: Router) { }
+
   // Method called on form soumission
   onSubmit() {
     // if username and password is ok displayed a welcome message
     if (this.username && this.password) {
       this.submittedMessage = `Bonjour ${this.username}, Vous êtes à présent connecter. `;
+      this.router.navigate(['/signup']);
     } else {
       // if username and password is not ok displayed a information message
       this.submittedMessage = 'Veuillez remplir tous les champs.';
