@@ -29,7 +29,8 @@ export class LoginComponent {
     // if username and password is ok displayed a welcome message
     if (this.username && this.password) {
       this.submittedMessage = `Bonjour ${this.username}, Vous êtes à présent connecter. `;
-      this.router.navigate(['/signup']);
+      // if identification is valid, user is redirected to the chart page
+      this.router.navigate(['/chart']);
     } else {
       // if username and password is not ok displayed a information message
       this.submittedMessage = 'Veuillez remplir tous les champs.';
