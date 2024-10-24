@@ -7,6 +7,8 @@ async function bootstrap() {
   // Initialize the NestJS application
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors(); // CORS Activation
+
   // Start the microservice in 3001 port
   const microservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
