@@ -29,8 +29,11 @@ export class LoginComponent {
     // if username and password is ok displayed a welcome message
     if (this.username && this.password) {
       this.submittedMessage = `Bonjour ${this.username}, Vous êtes à présent connecter. `;
-      // if identification is valid, user is redirected to the chart page
-      this.router.navigate(['/chart']);
+      // Delay the navigation by 1.5 seconds
+      setTimeout(() => {
+        // if identification is valid, user is redirected to the chart page
+        this.router.navigate(['/chart']);
+      }, 1500); //1500 milliseconds = 1.5 seconds
     } else {
       // if username and password is not ok displayed a information message
       this.submittedMessage = 'Veuillez remplir tous les champs.';
