@@ -1,13 +1,18 @@
-import { MicroserviceOptions } from './../node_modules/@nestjs/microservices/interfaces/microservice-configuration.interface.d';
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppService } from './app.service';
-import { Transport } from '@nestjs/microservices';
 import { FakeProbeService } from './services/fake-probe.service';
 import { DataController } from './data.controller';
 import { FilteringService } from './services/filtering.service';
+import { UserModule } from './user/user.module'; // Assure-toi que le chemin est correct
 
 @Module({
-  imports: [],
+  imports: [
+    // Connection to MongoDB
+    MongooseModule.forRoot('mongodb://localhost:27017/mydatabase'),
+    UserModule,
+  ],
   // controller to instantiate for the operation of the application
   controllers: [DataController],
   // to be injected for the operation of the application
