@@ -1,1 +1,16 @@
-<p>signup works!</p>
+<h2>S'inscrire</h2>
+<form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
+  <div>
+    <label for="username">Nom d'utilisateur:</label>
+    <input type="text" id="username" name="username" ngModel required>
+  </div>
+  <div>
+    <label for="password">Mot de passe:</label>
+    <input type="password" id="password" name="password" ngModel required>
+  </div>
+  <button type="submit" [disabled]="!signupForm.valid">S'inscrire</button>
+
+  <div [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
+    {{ submittedMessage }}
+  </div>
+</form>
