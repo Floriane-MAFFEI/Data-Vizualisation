@@ -1,16 +1,20 @@
 <h2>S'inscrire</h2>
 <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
-  <div>
-    <label for="username">Nom d'utilisateur:</label>
-    <input type="text" id="username" name="username" ngModel required>
-  </div>
-  <div>
-    <label for="password">Mot de passe:</label>
-    <input type="password" id="password" name="password" ngModel required>
-  </div>
+  <label for="username">Nom d'utilisateur :</label>
+  <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" ngModel required>
+
+  <label for="password">Mot de passe :</label>
+  <input type="password" id="password" name="password" placeholder="Mot de passe" ngModel required>
+
   <button type="submit" [disabled]="!signupForm.valid">S'inscrire</button>
 
   <div [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
     {{ submittedMessage }}
   </div>
 </form>
+
+<div class="button-container">
+  <div class="center">
+    <button><a routerLink="/login">J'ai déjà un compte, Se connecter</a></button>
+  </div>
+</div>
