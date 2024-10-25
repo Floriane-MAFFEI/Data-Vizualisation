@@ -1,42 +1,56 @@
-import { CommonModule, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    NgClass,
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+
   // Initialize property with a empty string
   username: string = '';
   password: string = '';
 
+  isSuccess: boolean = false;
+
   // initialize string type property but initialize currently null
   submittedMessage: string | null = null;
 
-  constructor(private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Method called on form soumission
   onSubmit() {
-    // if username and password is ok displayed a welcome message
-    if (this.username && this.password) {
-      this.submittedMessage = `Bonjour ${this.username}, Vous êtes à présent connecter. `;
-      // Delay the navigation by 1.5 seconds
-      setTimeout(() => {
-        // if identification is valid, user is redirected to the chart page
-        this.router.navigate(['/chart']);
-      }, 1500); //1500 milliseconds = 1.5 seconds
-    } else {
-      // if username and password is not ok displayed a information message
-      this.submittedMessage = 'Veuillez remplir tous les champs.';
-    }
+    // Create User Object
+    const userData = { username: this.username, password: this.password };
+
+    // Request POST with userData as request
+    this.http.post('http://localhost:3000/auth/login', userData).pipe(
+      catchError(err => {
+        console.error('Erreur lors de la connexion', err);
+        this.submittedMessage = 'Identifiants invalides.';
+        this.isSuccess = false;
+        return of(null); // Return null to avoid errors
+      })
+    )
+      // Wait for the response to the request 
+      .subscribe(response => {
+        // If no error
+        if (response) {
+          console.log('Connexion réussie', response);
+          this.submittedMessage = `Bonjour ${this.username}, vous êtes à présent connecté.`;
+          this.isSuccess = true;
+          // Delay before redirection to the chart page
+          setTimeout(() => {
+            this.router.navigate(['chart']);
+          }, 1500);
+        }
+      });
   }
 }

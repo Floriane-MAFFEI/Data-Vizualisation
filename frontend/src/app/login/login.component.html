@@ -19,9 +19,6 @@
 </form>
 
 <!-- Adding dynamic class based on message type -->
-<div [ngClass]="{
-  'success': submittedMessage?.startsWith('Bonjour'),
-  'error': submittedMessage === 'Veuillez remplir tous les champs.'
-}">
+<div [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
   {{ submittedMessage }}
 </div>
