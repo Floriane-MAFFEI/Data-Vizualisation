@@ -15,13 +15,15 @@ interface ApiResponse {
 export class ChartComponent implements OnInit {
 
   // URL of API to retrieve data
-  private apiUrl = 'http://localhost:3000/data';
+  private rawApiUrl = 'http://localhost:3000/data';
+  private filteredApiUrl = 'http://localhost:3000/data/filtered'
 
   // Initialize variables
   public chart: any;
   private intervalId: any;
   private labels: string[] = [];
   private rawValues: number[] = [];
+  private filteredValues: number[] = [];
 
   // Declaration of a variable for the number of visible elements
   private visibleElement: number = 15;
@@ -42,19 +44,33 @@ export class ChartComponent implements OnInit {
   private fetchData() {
     // Call the HttpClient method via the get() method
     // .susbscribe enables to manage errors 
-    this.http.get<ApiResponse>(this.apiUrl).subscribe(
+    this.http.get<ApiResponse>(this.rawApiUrl).subscribe(
       response => {
         this.rawValues = response.data; // Retrieve raw data
         // console.log(this.rawValues)
         this.labels = this.rawValues.map((index) => `Label ${index + 1}`); // Create labels //! False Labels
         // console.log('label:', this.labels)
-        this.updateChart(); // Update the chart with new data
+        this.fetchFilteredData(); // Fetch also filtered data      
       },
       error => {
         console.error('Error fetching data', error);
       }
     );
   }
+
+  private fetchFilteredData() {
+    // Fetch filtered data from the API
+    this.http.get<ApiResponse>(this.filteredApiUrl).subscribe(
+      response => {
+        this.filteredValues = response.data; // Store filtered data
+        this.updateChart(); // Update the chart with new data
+      },
+      error => {
+        console.error('Error fetching filtered data', error);
+      }
+    );
+  }
+
 
   private updateChart() {
     const displayedRawValues = this.rawValues.slice(-this.visibleElement); // Get recent raw values
@@ -65,6 +81,7 @@ export class ChartComponent implements OnInit {
       // Data recovery
       this.chart.data.labels = displayedLabels;
       this.chart.data.datasets[0].data = displayedRawValues;
+      this.chart.data.datasets[1].data = this.filteredValues.slice(-this.visibleElement);
       this.chart.update(); // Update Chart
     } else {
       // If chart does not exist, create it
@@ -88,6 +105,13 @@ export class ChartComponent implements OnInit {
             data: this.rawValues,
             backgroundColor: 'rgba(50, 165, 217, 0.2)',
             borderColor: 'rgba(50, 165, 217, 1)',
+            borderWidth: 2,
+          },
+          {
+            label: 'filtered Data',
+            data: this.filteredValues.slice(-this.visibleElement),
+            backgroundColor: 'rgba(30,62,105, 0.2)',
+            borderColor: 'rgba(30,62,105, 1)',
             borderWidth: 2,
           }
         ]
