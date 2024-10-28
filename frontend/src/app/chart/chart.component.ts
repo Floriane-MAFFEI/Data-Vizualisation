@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart, registerables } from 'chart.js';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 // Defines the shape of the object to be received
 interface ApiResponse {
@@ -9,6 +12,8 @@ interface ApiResponse {
 
 @Component({
   selector: 'app-chart',
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
@@ -28,17 +33,41 @@ export class ChartComponent implements OnInit {
   // Declaration of a variable for the number of visible elements
   private visibleElement: number = 15;
 
+  public newUsername: string = ''; // Property for new username
+
   // Injection into constructor for initialization
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router, public authService: AuthService) {
     // Register Chart.js plugins on initialization 
     Chart.register(...registerables);
   }
 
   ngOnInit() {
-    this.fetchData(); // Fetch data on initialization
-    this.intervalId = setInterval(() => this.fetchData(), 3000); // Data update every 3 seconds
+    // Checks if a user is logged in
+    if (!this.authService.isLoggedIn()) {
+      // Redirect to login page if not logged in 
+      this.router.navigate(['login']);
+    } else {
+      // data recovery call all 3 seconds
+      this.fetchData();
+      this.intervalId = setInterval(() => this.fetchData(), 3000);
+      // console.log(this.authService.getUsername()); // for debug
+    }
   }
 
+  // Method to update name without register it in BDD
+  public updateUsername() {
+    if (this.newUsername) {
+      this.authService.updateUsername(this.newUsername);
+      this.newUsername = ''; // Reset the input field
+      // alert(`Nom d'utilisateur mis à jour en : ${this.authService.getUsername()}`); // for debug
+    }
+  }
+
+  public logout() {
+    // Call the Auth service method
+    this.authService.logout();
+    this.router.navigate(['login']); // Redirect to login page
+  }
 
   // Data recovery method
   private fetchData() {

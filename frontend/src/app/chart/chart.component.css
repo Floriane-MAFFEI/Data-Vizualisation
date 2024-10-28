@@ -28,3 +28,13 @@ button:hover {
   width: 100%;
   height: 400px;
 }
+
+.modification,
+#newUsername {
+  margin: 10px 0 0 10px;
+}
+
+.newUsername {
+  text-align: center;
+  margin: 20px 0;
+}

@@ -1,7 +1,19 @@
+<h2>Bienvenue, {{ authService.getUsername() }}!</h2>
+
+<form class="newUsername" (ngSubmit)="updateUsername()">
+  <label for="newUsername">Nouveau nom d'utilisateur:</label>
+  <input id="newUsername" [(ngModel)]="newUsername" name="newUsername" required />
+  <button class="modification" type="submit">Modifier</button>
+</form>
+
 <div class="chart-container">
   <canvas id="combinedChart"></canvas>
 </div>
 <div class="button-container">
   <button (click)="loadLessData()">Charger moins de données</button>
   <button (click)="loadMoreData()">Charger plus de données</button>
+</div>
+
+<div class="button-container">
+  <button class="logout" (click)="logout()">Déconnexion</button>
 </div>

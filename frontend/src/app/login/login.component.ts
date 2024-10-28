@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,11 @@ export class LoginComponent {
   // initialize string type property but initialize currently null
   submittedMessage: string | null = null;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
 
   // Method called on form soumission
   onSubmit() {
+
     // Create User Object
     const userData = { username: this.username, password: this.password };
 
@@ -41,9 +43,9 @@ export class LoginComponent {
     )
       // Wait for the response to the request 
       .subscribe(response => {
-        // If no error
         if (response) {
           console.log('Connexion réussie', response);
+          this.authService.setUsername(this.username); // Store username
           this.submittedMessage = `Bonjour ${this.username}, vous êtes à présent connecté.`;
           this.isSuccess = true;
           // Delay before redirection to the chart page
