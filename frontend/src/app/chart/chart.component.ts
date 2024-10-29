@@ -47,9 +47,9 @@ export class ChartComponent implements OnInit {
       // Redirect to login page if not logged in 
       this.router.navigate(['login']);
     } else {
-      // data recovery call all 3 seconds
+      // data recovery call all 5 seconds
       this.fetchData();
-      this.intervalId = setInterval(() => this.fetchData(), 3000);
+      this.intervalId = setInterval(() => this.fetchData(), 5000);
       // console.log(this.authService.getUsername()); // for debug
     }
   }
@@ -104,7 +104,6 @@ export class ChartComponent implements OnInit {
   private updateChart() {
     const displayedRawValues = this.rawValues.slice(-this.visibleElement); // Get recent raw values
     const displayedLabels = this.labels.slice(-this.visibleElement); // Get recent labels //! Previous Error to be corrected
-
     // If chart exists, update it
     if (this.chart) {
       // Data recovery
@@ -160,6 +159,28 @@ export class ChartComponent implements OnInit {
         maintainAspectRatio: false,
       }
     });
+
+    // Event on click on chart
+    ctx.onclick = (event) => {
+      // Retrieve point nearest to the click
+      const activePoints = this.chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
+      // check if points clicked
+      if (activePoints.length > 0) {
+
+        const clickedIndex = activePoints[0].index; // Get the index of the clicked point
+
+        // Find matching index in visible raw values (all data (number) - visible element (number) + index of the clicked point (number) )
+        const actualIndex = this.rawValues.length - this.visibleElement + clickedIndex;
+
+        const newValue = this.filteredValues[actualIndex]; // Retrieve the filtered value corresponding to the previously obtained index
+
+        // Update raw value with filtered value
+        this.rawValues[actualIndex] = newValue;
+
+        this.updateChart(); // Update the chart
+      };
+
+    };
   }
 
   // Method to load more data
