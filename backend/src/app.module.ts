@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module'; // Assure-toi que le chemin est
 @Module({
   imports: [
     // Connection to MongoDB
-    MongooseModule.forRoot('mongodb://bh-test-mongo-1:27017/mydatabase'),
+    MongooseModule.forRoot('mongodb://data-vizualisation-mongo-1:27017/mydatabase'),
     UserModule,
   ],
   // controller to instantiate for the operation of the application

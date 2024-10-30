@@ -1,17 +1,18 @@
-# Project Deployment
+# Data-Vizualisation Project Deployment
 
-This README provides two different installation methods for the project while awaiting the Docker implementation.
+This README provides three differents installation methods for the project.
 
 ## Table of Contents
 
-- [On Linux (script)](#on-linux-script)
+- [Script](#script) => **Recommanded**
 - [Manual Installation](#manual-installation)
+- [Docker Implementation](#docker-implementation)
 
 ## Project Structure
 
 The project consists of two main parts:
 
-- **Backend** : Developed in **NestJS**
+- **Backend** : Developed in **NestJS** and a database in **MongoDB**
 - **Frontend** : Developed in **Angular**
 
 ## Prerequisites
@@ -19,7 +20,7 @@ The project consists of two main parts:
 Before starting the deployment, ensure you have the following installed:
 
 - **Git** : To clone the repository.
-- **Un terminal** : To execute commands.
+- **A terminal** : To execute commands.
 
 ## Clone the Repository
 
@@ -32,21 +33,19 @@ then
 
 ```cd Data-Vizualisation```
 
-## On Linux (script)
+## Script
 
 ### Run the Installation Script
 
-Once in the project directory:
+Once the clone the repository, going in the project directory:
 
 Execute the script:
 ```./install.sh```
 
-
 **If you encounter execution issues** :
  Make the script executable : ```chmod +x install.sh```.
 
-The script will check if Node.js, npm, and MongoDB are installed. If they are not, the script will attempt to install them automatically.
-
+The script will check if Node.js, npm, MongoDB and Docker are installed. If they are not, the script will attempt to install them automatically.
 
 ## Manual Installation
 
@@ -83,13 +82,23 @@ To start the frontend, run:
 ```ng serve```
 
 
----
-
 ## Docker Implementation
 
-Docker implementation is in progress. Docker images and files will be provided soon to simplify deployment and dependency management.
+1. To get started, clone the repository using the following command:
+```
+git clone git@github.com:Floriane-MAFFEI/Data-Vizualisation.git
+```
 
----
+2. then go to the project folder :
+```cd Data-Vizualisation```
+
+3.Install the dependencies:
+```npm install``` in the 2 folders (backend and frontend)
+
+4. Return to the root of the project
+
+5. Build and start the containers by running the following command:
+```docker-compose up --build```
 
 ## Access
 

@@ -41,6 +41,23 @@ check_installations() {
         echo "MongoDB is already installed."
     fi
 
+    # Check for Docker
+    if ! command -v docker >/dev/null 2>&1; then
+        echo "Docker is not installed. Installing Docker..."
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update
+        sudo apt-get install -y docker-ce || { echo "Docker installation failed."; exit 1; }
+        
+        # Add user to the docker group
+        sudo usermod -aG docker $USER
+        echo "Docker has been installed."
+    else
+        echo "Docker is already installed."
+    fi
+
     echo "All prerequisites are installed. Proceeding to project installation..."
 }
 
@@ -59,13 +76,8 @@ install_dependencies() {
 
 # Start the backend and frontend
 start_services() {
-    # Start the frontend
-    echo "Starting the frontend..."
-    ng serve &
-
-    # Start the backend
-    echo "Starting the backend..."
-    npm run start &
+    cd ..
+    docker-compose up --build
 }
 
 main() {
