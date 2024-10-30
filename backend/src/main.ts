@@ -7,7 +7,9 @@ async function bootstrap() {
   try {
     // CORS Activation// Initialize the NestJS application
     const app = await NestFactory.create(AppModule);
-    app.enableCors();// CORS Activation
+    app.enableCors({
+      origin: ['http://localhost:4200'],
+    });// CORS Activation
 
     // ValidationPipe Activate 
     app.useGlobalPipes(new ValidationPipe({
