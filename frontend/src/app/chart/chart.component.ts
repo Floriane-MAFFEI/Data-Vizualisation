@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart, registerables } from 'chart.js';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 // Defines the shape of the object to be received
 interface ApiResponse {
@@ -17,7 +18,7 @@ interface ApiResponse {
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnDestroy {
 
   // URL of API to retrieve data
   private rawApiUrl = 'http://localhost:3000/data';
@@ -34,6 +35,10 @@ export class ChartComponent implements OnInit {
   private visibleElement: number = 15;
 
   public newUsername: string = ''; // Property for new username
+
+
+  private destroy$ = new Subject<boolean>();// Subject for destroy
+  ;
 
   // Injection into constructor for initialization
   constructor(private http: HttpClient, private router: Router, public authService: AuthService) {
@@ -52,6 +57,15 @@ export class ChartComponent implements OnInit {
       this.intervalId = setInterval(() => this.fetchData(), 5000);
       // console.log(this.authService.getUsername()); // for debug
     }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up resources to prevent memory leaks
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    this.destroy$.next(true); // emit a destroy event
+    this.destroy$.complete(); // complete the Subject
   }
 
   // Method to update name without register it in BDD
