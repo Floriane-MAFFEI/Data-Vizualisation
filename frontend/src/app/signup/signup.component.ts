@@ -1,37 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importation de Reactive Forms
 import { catchError, of } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';  // Importation de ReactiveFormsModule pour gérer les formulaires réactifs
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     RouterLink
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
+  signupForm!: FormGroup;
   submitted = false;
   error: string | null = null;
 
   isSuccess: boolean = false;
-
   submittedMessage: string | null = null;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private fb: FormBuilder,  // FormBuilder for create form
+    private http: HttpClient,
+    private router: Router,
+  ) { }
 
-  onSubmit(signupForm: any) {
+  ngOnInit(): void {
+    // Initializing the form with validations
+    this.signupForm = this.fb.group({
+      username: ['', [Validators.required]],  // UserName is required
+      password: ['', [Validators.required]]   // Password is required
+    });
+  }
 
-    const userData = {
-      username: signupForm.value.username,
-      password: signupForm.value.password
-    };
+  onSubmit(): void {
+    // If the form is invalid, we stop execution
+    if (this.signupForm.invalid) {
+      return;
+    }
+
+    // Get the values ​​from the form
+    const userData = this.signupForm.value;
 
     this.http.post('http://localhost:3000/auth/signup', userData).pipe(
       catchError(err => {

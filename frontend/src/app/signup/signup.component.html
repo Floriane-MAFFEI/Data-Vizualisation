@@ -1,13 +1,16 @@
 <h2>S'inscrire</h2>
-<form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
+
+<!-- Reactive Form -->
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
   <label for="username">Nom d'utilisateur :</label>
-  <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" ngModel required>
+  <input type="text" id="username" formControlName="username" placeholder="Nom d'utilisateur" required>
 
   <label for="password">Mot de passe :</label>
-  <input type="password" id="password" name="password" placeholder="Mot de passe" ngModel required>
+  <input type="password" id="password" formControlName="password" placeholder="Mot de passe" required>
 
-  <button type="submit" [disabled]="!signupForm.valid">S'inscrire</button>
+  <button type="submit" [disabled]="signupForm.invalid">S'inscrire</button>
 
+  <!-- Display of the dynamic message deepending on the result -->
   <div [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
     {{ submittedMessage }}
   </div>
