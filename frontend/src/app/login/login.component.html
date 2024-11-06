@@ -1,21 +1,18 @@
 <h2>Se connecter</h2>
 
-<!-- form and method linked and called on submission -->
-<form (ngSubmit)="onSubmit()">
+<!-- Reactiv form -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <label for="username">Nom d'utilisateur :</label>
-  <!-- Bind the fiel value to username property in the component -->
-  <input type="text" id="username" placeholder="Nom d'utilisateur" [(ngModel)]="username" name="username" required>
-
+  <!-- Links the field value to the username property in the component -->
+  <input type="text" id="username" placeholder="Nom d'utilisateur" formControlName="username" required>
   <br>
 
   <label for="password">Mot de passe :</label>
-
-  <!-- Bind the fiel value to password property in the component -->
-  <input type="password" id="password" placeholder="Mot de passe" [(ngModel)]="password" name="password" required>
-
+  <!-- Links the field value to the password property in the component -->
+  <input type="password" id="password" placeholder="Mot de passe" formControlName="password" required>
   <br>
 
-  <button type="submit">Se connecter</button>
+  <button type="submit" [disabled]="loginForm.invalid">Se connecter</button>
 </form>
 
 <!-- Adding dynamic class based on message type -->
@@ -23,6 +20,7 @@
   {{ submittedMessage }}
 </div>
 
+<!-- Register button -->
 <div class="button-container">
   <div class="center">
     <button><a routerLink="/signup">M'inscrire</a></button>
